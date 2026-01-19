@@ -1,12 +1,23 @@
 const express = require("express");
 const fs = require("fs");
+const path = require("path");
 const cors = require("cors");
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 
-const EMAIL_FILE = "./emails.json";
+// Serve static files
+app.use(express.static("public"));
 
+const EMAIL_FILE = path.join(__dirname, "emails.json");
+
+// Root route (loads index.html)
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+// API route
 app.get("/email", (req, res) => {
   let emails = JSON.parse(fs.readFileSync(EMAIL_FILE, "utf8"));
 
@@ -23,4 +34,6 @@ app.get("/email", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("Server running"));
+app.listen(PORT, () =>
+  console.log(`Server running on port ${PORT}`)
+);
