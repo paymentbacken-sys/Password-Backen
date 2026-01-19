@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Email Reveal</title>
+</head>
+<body>
+
+<button onclick="showEmail()">Show Email</button>
+<p id="email"></p>
+
+<script>
+function showEmail() {
+  fetch("https://password-backen.onrender.com/email")
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("email").innerText =
+        data.email || data.message;
+    });
+}
+</script>
+
+</body>
+</html>

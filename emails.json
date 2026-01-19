@@ -1,0 +1,6 @@
+[
+  { "email": "email1@gmail.com", "used": false },
+  { "email": "email2@gmail.com", "used": false },
+  { "email": "email3@gmail.com", "used": false },
+  { "email": "email4@gmail.com", "used": false }
+]
