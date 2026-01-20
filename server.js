@@ -7,8 +7,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// In-memory lock to enforce one email per student
-const issuedUsers = new Set();
+// In-memory map: studentKey -> timestamp of last email
+const issuedUsers = new Map();
 
 // Absolute path to emails.json
 const EMAIL_FILE = path.join(__dirname, "emails.json");
@@ -16,24 +16,30 @@ const EMAIL_FILE = path.join(__dirname, "emails.json");
 // Serve frontend
 app.use(express.static("public"));
 
-// Root test route
+// Root route
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Email API: One email per student
+// Email API
 app.get("/email", (req, res) => {
   const category = req.query.category;
   if (!category) return res.status(400).json({ message: "Category missing" });
 
   // Unique student key: IP + User-Agent
   const userKey = req.ip + "|" + req.headers["user-agent"];
+  const now = Date.now();
 
-  // Already issued? block
+  const lockTime = 5 * 60 * 1000; // 5 minutes in ms
+
+  // Check if student requested email within last 5 minutes
   if (issuedUsers.has(userKey)) {
-    return res.status(403).json({
-      message: "You are permitted for only ONE registered email."
-    });
+    const lastTime = issuedUsers.get(userKey);
+    if (now - lastTime < lockTime) {
+      return res.status(403).json({
+        message: "You are paid for only one registered email."
+      });
+    }
   }
 
   // Read email data
@@ -57,10 +63,9 @@ app.get("/email", (req, res) => {
   nextEmail.used = true;
   fs.writeFileSync(EMAIL_FILE, JSON.stringify(data, null, 2));
 
-  // Lock student
-  issuedUsers.add(userKey);
+  // Update timestamp
+  issuedUsers.set(userKey, now);
 
-  // Return email
   res.json({ email: nextEmail.email });
 });
 
