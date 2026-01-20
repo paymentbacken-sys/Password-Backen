@@ -5,87 +5,148 @@
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
     }
+
+    h2 {
+      text-align: center;
+    }
+
+    .section {
+      margin-bottom: 30px;
+      background: #ffffff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .section h3 {
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 10px;
+    }
+
     button {
-      display: block;
-      margin: 8px 0;
-      padding: 8px 12px;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
       cursor: pointer;
+      color: white;
     }
+
+    .practice {
+      background: #1e88e5;
+    }
+
+    .study {
+      background: #43a047;
+    }
+
+    button:hover {
+      opacity: 0.9;
+    }
+
     #email {
-      margin-top: 20px;
+      margin-top: 25px;
+      padding: 15px;
+      background: #e8f5e9;
+      border-left: 5px solid #43a047;
       font-weight: bold;
-      color: green;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
 
-<h2>Email Access</h2>
+<h2>Email Access Panel</h2>
 
 <div id="buttons"></div>
 
-<p id="email"></p>
+<div id="email"></div>
 
 <script>
-const categories = [
-  // Class 9
-  { id: "class9_science_practice", label: "Class 9 Science – Practice Test" },
-  { id: "class9_science_study", label: "Class 9 Science – Study Material" },
-  { id: "class9_math_practice", label: "Class 9 Math – Practice Test" },
-  { id: "class9_math_study", label: "Class 9 Math – Study Material" },
+const data = {
+  "Class 9": [
+    { id: "class9_science_practice", label: "Science – Practice Test", type: "practice" },
+    { id: "class9_science_study", label: "Science – Study Material", type: "study" },
+    { id: "class9_math_practice", label: "Math – Practice Test", type: "practice" },
+    { id: "class9_math_study", label: "Math – Study Material", type: "study" }
+  ],
 
-  // Class 10
-  { id: "class10_science_practice", label: "Class 10 Science – Practice Test" },
-  { id: "class10_science_study", label: "Class 10 Science – Study Material" },
-  { id: "class10_math_practice", label: "Class 10 Math – Practice Test" },
-  { id: "class10_math_study", label: "Class 10 Math – Study Material" },
+  "Class 10": [
+    { id: "class10_science_practice", label: "Science – Practice Test", type: "practice" },
+    { id: "class10_science_study", label: "Science – Study Material", type: "study" },
+    { id: "class10_math_practice", label: "Math – Practice Test", type: "practice" },
+    { id: "class10_math_study", label: "Math – Study Material", type: "study" }
+  ],
 
-  // Class 11
-  { id: "class11_physics_practice", label: "Class 11 Physics – Practice Test" },
-  { id: "class11_physics_study", label: "Class 11 Physics – Study Material" },
-  { id: "class11_chemistry_practice", label: "Class 11 Chemistry – Practice Test" },
-  { id: "class11_chemistry_study", label: "Class 11 Chemistry – Study Material" },
-  { id: "class11_math_practice", label: "Class 11 Math – Practice Test" },
-  { id: "class11_math_study", label: "Class 11 Math – Study Material" },
-  { id: "class11_biology_practice", label: "Class 11 Biology – Practice Test" },
-  { id: "class11_biology_study", label: "Class 11 Biology – Study Material" },
+  "Class 11": [
+    { id: "class11_physics_practice", label: "Physics – Practice Test", type: "practice" },
+    { id: "class11_physics_study", label: "Physics – Study Material", type: "study" },
+    { id: "class11_chemistry_practice", label: "Chemistry – Practice Test", type: "practice" },
+    { id: "class11_chemistry_study", label: "Chemistry – Study Material", type: "study" },
+    { id: "class11_math_practice", label: "Math – Practice Test", type: "practice" },
+    { id: "class11_math_study", label: "Math – Study Material", type: "study" },
+    { id: "class11_biology_practice", label: "Biology – Practice Test", type: "practice" },
+    { id: "class11_biology_study", label: "Biology – Study Material", type: "study" }
+  ],
 
-  // Class 12
-  { id: "class12_physics_practice", label: "Class 12 Physics – Practice Test" },
-  { id: "class12_physics_study", label: "Class 12 Physics – Study Material" },
-  { id: "class12_chemistry_practice", label: "Class 12 Chemistry – Practice Test" },
-  { id: "class12_chemistry_study", label: "Class 12 Chemistry – Study Material" },
-  { id: "class12_math_practice", label: "Class 12 Math – Practice Test" },
-  { id: "class12_math_study", label: "Class 12 Math – Study Material" },
-  { id: "class12_biology_practice", label: "Class 12 Biology – Practice Test" },
-  { id: "class12_biology_study", label: "Class 12 Biology – Study Material" },
+  "Class 12": [
+    { id: "class12_physics_practice", label: "Physics – Practice Test", type: "practice" },
+    { id: "class12_physics_study", label: "Physics – Study Material", type: "study" },
+    { id: "class12_chemistry_practice", label: "Chemistry – Practice Test", type: "practice" },
+    { id: "class12_chemistry_study", label: "Chemistry – Study Material", type: "study" },
+    { id: "class12_math_practice", label: "Math – Practice Test", type: "practice" },
+    { id: "class12_math_study", label: "Math – Study Material", type: "study" },
+    { id: "class12_biology_practice", label: "Biology – Practice Test", type: "practice" },
+    { id: "class12_biology_study", label: "Biology – Study Material", type: "study" }
+  ],
 
-  // IIT-JEE
-  { id: "iitjee_physics_practice", label: "IIT-JEE Physics – Practice Test" },
-  { id: "iitjee_physics_study", label: "IIT-JEE Physics – Study Material" },
-  { id: "iitjee_chemistry_practice", label: "IIT-JEE Chemistry – Practice Test" },
-  { id: "iitjee_chemistry_study", label: "IIT-JEE Chemistry – Study Material" },
-  { id: "iitjee_math_practice", label: "IIT-JEE Math – Practice Test" },
-  { id: "iitjee_math_study", label: "IIT-JEE Math – Study Material" },
+  "IIT-JEE": [
+    { id: "iitjee_physics_practice", label: "Physics – Practice Test", type: "practice" },
+    { id: "iitjee_physics_study", label: "Physics – Study Material", type: "study" },
+    { id: "iitjee_chemistry_practice", label: "Chemistry – Practice Test", type: "practice" },
+    { id: "iitjee_chemistry_study", label: "Chemistry – Study Material", type: "study" },
+    { id: "iitjee_math_practice", label: "Math – Practice Test", type: "practice" },
+    { id: "iitjee_math_study", label: "Math – Study Material", type: "study" }
+  ],
 
-  // NEET
-  { id: "neet_physics_practice", label: "NEET Physics – Practice Test" },
-  { id: "neet_physics_study", label: "NEET Physics – Study Material" },
-  { id: "neet_chemistry_practice", label: "NEET Chemistry – Practice Test" },
-  { id: "neet_chemistry_study", label: "NEET Chemistry – Study Material" },
-  { id: "neet_biology_practice", label: "NEET Biology – Practice Test" },
-  { id: "neet_biology_study", label: "NEET Biology – Study Material" }
-];
+  "NEET": [
+    { id: "neet_physics_practice", label: "Physics – Practice Test", type: "practice" },
+    { id: "neet_physics_study", label: "Physics – Study Material", type: "study" },
+    { id: "neet_chemistry_practice", label: "Chemistry – Practice Test", type: "practice" },
+    { id: "neet_chemistry_study", label: "Chemistry – Study Material", type: "study" },
+    { id: "neet_biology_practice", label: "Biology – Practice Test", type: "practice" },
+    { id: "neet_biology_study", label: "Biology – Study Material", type: "study" }
+  ]
+};
 
 const container = document.getElementById("buttons");
 
-categories.forEach(c => {
-  const btn = document.createElement("button");
-  btn.innerText = c.label;
-  btn.onclick = () => getEmail(c.id);
-  container.appendChild(btn);
-});
+for (const section in data) {
+  const box = document.createElement("div");
+  box.className = "section";
+
+  box.innerHTML = `<h3>${section}</h3><div class="grid"></div>`;
+  const grid = box.querySelector(".grid");
+
+  data[section].forEach(item => {
+    const btn = document.createElement("button");
+    btn.textContent = item.label;
+    btn.className = item.type;
+    btn.onclick = () => getEmail(item.id);
+    grid.appendChild(btn);
+  });
+
+  container.appendChild(box);
+}
 
 function getEmail(category) {
   fetch(`/email?category=${category}`)
@@ -93,9 +154,6 @@ function getEmail(category) {
     .then(data => {
       document.getElementById("email").innerText =
         data.email || data.message;
-    })
-    .catch(() => {
-      document.getElementById("email").innerText = "Server error";
     });
 }
 </script>
