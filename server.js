@@ -7,37 +7,36 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// 🔐 In-memory lock (per server instance)
+// In-memory lock to enforce one email per student
 const issuedUsers = new Set();
 
-// Absolute path for Render
+// Absolute path to emails.json
 const EMAIL_FILE = path.join(__dirname, "emails.json");
+
+// Serve frontend
+app.use(express.static("public"));
 
 // Root test route
 app.get("/", (req, res) => {
-  res.send("SERVER IS RUNNING");
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// 🔐 EMAIL API (ONE EMAIL PER STUDENT)
+// Email API: One email per student
 app.get("/email", (req, res) => {
   const category = req.query.category;
+  if (!category) return res.status(400).json({ message: "Category missing" });
 
-  if (!category) {
-    return res.status(400).json({ message: "Category missing" });
-  }
+  // Unique student key: IP + User-Agent
+  const userKey = req.ip + "|" + req.headers["user-agent"];
 
-  // 🔑 Unique student fingerprint
-  const userKey =
-    req.ip + "|" + req.headers["user-agent"];
-
-  // ❌ Already received an email
+  // Already issued? block
   if (issuedUsers.has(userKey)) {
     return res.status(403).json({
       message: "You are permitted for only ONE registered email."
     });
   }
 
-  // ❌ Email store missing
+  // Read email data
   if (!fs.existsSync(EMAIL_FILE)) {
     return res.status(500).json({ message: "emails.json not found" });
   }
@@ -45,40 +44,26 @@ app.get("/email", (req, res) => {
   let data;
   try {
     data = JSON.parse(fs.readFileSync(EMAIL_FILE, "utf8"));
-  } catch (err) {
+  } catch {
     return res.status(500).json({ message: "Invalid JSON format" });
   }
 
-  // ❌ Invalid category
-  if (!data[category]) {
-    return res.status(404).json({ message: "Invalid category" });
-  }
+  if (!data[category]) return res.status(404).json({ message: "Invalid category" });
 
-  // ✅ Find unused email
   const nextEmail = data[category].find(e => !e.used);
+  if (!nextEmail) return res.json({ message: "No emails left for this category" });
 
-  if (!nextEmail) {
-    return res.json({
-      message: "No emails left for this category"
-    });
-  }
-
-  // ✅ Mark email as used
+  // Mark email as used
   nextEmail.used = true;
-  fs.writeFileSync(
-    EMAIL_FILE,
-    JSON.stringify(data, null, 2)
-  );
+  fs.writeFileSync(EMAIL_FILE, JSON.stringify(data, null, 2));
 
-  // 🔒 Lock student permanently
+  // Lock student
   issuedUsers.add(userKey);
 
-  // ✅ Send email
+  // Return email
   res.json({ email: nextEmail.email });
 });
 
 // Start server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log("Server running on port", PORT);
-});
+app.listen(PORT, () => console.log("Server running on port", PORT));
