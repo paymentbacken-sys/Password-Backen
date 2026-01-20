@@ -30,7 +30,7 @@ app.get("/email", (req, res) => {
   const userKey = req.ip + "|" + req.headers["user-agent"];
   const now = Date.now();
 
-  const lockTime = 5 * 60 * 1000; // 5 minutes in ms
+  const lockTime = 60 * 60 * 1000; // 5 minutes in ms
 
   // Check if student requested email within last 5 minutes
   if (issuedUsers.has(userKey)) {
