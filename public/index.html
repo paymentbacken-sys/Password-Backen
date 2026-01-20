@@ -21,16 +21,17 @@
 
 <script>
 function getEmail(category) {
-  fetch(`https://YOUR-RENDER-URL.onrender.com/email?category=${category}`)
+  fetch(`/email?category=${category}`)
     .then(res => res.json())
     .then(data => {
       document.getElementById("email").innerText =
         data.email || data.message;
+    })
+    .catch(() => {
+      document.getElementById("email").innerText = "Server error";
     });
 }
 </script>
-
-
 
 </body>
 </html>
