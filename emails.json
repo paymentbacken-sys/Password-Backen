@@ -1,7 +1,11 @@
 {
   "class9_science_practice": [
     { "email": "c9_sci_pt1@gmail.com", "used": false },
-    { "email": "c9_sci_pt2@gmail.com", "used": false }
+    { "email": "c9_sci_pt2@gmail.com", "used": false },
+    { "email": "c9_sci_pt3@gmail.com", "used": false },
+    { "email": "c9_sci_pt4@gmail.com", "used": false },
+    { "email": "c9_sci_pt5@gmail.com", "used": false }
+    { "email": "c9_sci_pt6@gmail.com", "used": false }
   ],
   "class9_science_study": [
     { "email": "c9_sci_sm1@gmail.com", "used": false }
