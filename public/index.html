@@ -99,6 +99,8 @@ h2{
 <script>
 let alreadyUsed = false;
 
+const classButtons = document.querySelectorAll(".class-btn");
+
 const data = {
   class9: [
     {id:"class9_science_practice", label:"Science – Practice", type:"practice"},
@@ -151,12 +153,11 @@ const data = {
 };
 
 function showClass(cls){
+  if(alreadyUsed) return;
+
   const box = document.getElementById("subjects");
   box.innerHTML = "";
   box.style.display = "grid";
-  alreadyUsed = false;
-  document.getElementById("email").innerText = "";
-  document.getElementById("message").innerText = "";
 
   data[cls].forEach(s=>{
     const b = document.createElement("button");
@@ -177,7 +178,12 @@ function getEmail(category){
       document.getElementById("message").innerText =
         "You have permission for only one registered email.";
 
+      // 🔒 Disable ALL subject buttons
       document.querySelectorAll(".sub-btn").forEach(b=>b.disabled=true);
+
+      // 🔒 Disable ALL class buttons
+      classButtons.forEach(b=>b.disabled=true);
+
       alreadyUsed = true;
     })
     .catch(()=>{
@@ -185,6 +191,7 @@ function getEmail(category){
     });
 }
 </script>
+
 
 </body>
 </html>
