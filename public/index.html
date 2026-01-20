@@ -2,24 +2,91 @@
 <html>
 <head>
   <title>Email Reveal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    button {
+      display: block;
+      margin: 8px 0;
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+    #email {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
 </head>
 <body>
 
-<button onclick="getEmail('class9_science_practice')">
-  Class 9 Science – Practice Test
-</button>
+<h2>Email Access</h2>
 
-<button onclick="getEmail('class9_science_study')">
-  Class 9 Science – Study Material
-</button>
-
-<button onclick="getEmail('neet_biology_practice')">
-  NEET Biology – Practice Test
-</button>
+<div id="buttons"></div>
 
 <p id="email"></p>
 
 <script>
+const categories = [
+  // Class 9
+  { id: "class9_science_practice", label: "Class 9 Science – Practice Test" },
+  { id: "class9_science_study", label: "Class 9 Science – Study Material" },
+  { id: "class9_math_practice", label: "Class 9 Math – Practice Test" },
+  { id: "class9_math_study", label: "Class 9 Math – Study Material" },
+
+  // Class 10
+  { id: "class10_science_practice", label: "Class 10 Science – Practice Test" },
+  { id: "class10_science_study", label: "Class 10 Science – Study Material" },
+  { id: "class10_math_practice", label: "Class 10 Math – Practice Test" },
+  { id: "class10_math_study", label: "Class 10 Math – Study Material" },
+
+  // Class 11
+  { id: "class11_physics_practice", label: "Class 11 Physics – Practice Test" },
+  { id: "class11_physics_study", label: "Class 11 Physics – Study Material" },
+  { id: "class11_chemistry_practice", label: "Class 11 Chemistry – Practice Test" },
+  { id: "class11_chemistry_study", label: "Class 11 Chemistry – Study Material" },
+  { id: "class11_math_practice", label: "Class 11 Math – Practice Test" },
+  { id: "class11_math_study", label: "Class 11 Math – Study Material" },
+  { id: "class11_biology_practice", label: "Class 11 Biology – Practice Test" },
+  { id: "class11_biology_study", label: "Class 11 Biology – Study Material" },
+
+  // Class 12
+  { id: "class12_physics_practice", label: "Class 12 Physics – Practice Test" },
+  { id: "class12_physics_study", label: "Class 12 Physics – Study Material" },
+  { id: "class12_chemistry_practice", label: "Class 12 Chemistry – Practice Test" },
+  { id: "class12_chemistry_study", label: "Class 12 Chemistry – Study Material" },
+  { id: "class12_math_practice", label: "Class 12 Math – Practice Test" },
+  { id: "class12_math_study", label: "Class 12 Math – Study Material" },
+  { id: "class12_biology_practice", label: "Class 12 Biology – Practice Test" },
+  { id: "class12_biology_study", label: "Class 12 Biology – Study Material" },
+
+  // IIT-JEE
+  { id: "iitjee_physics_practice", label: "IIT-JEE Physics – Practice Test" },
+  { id: "iitjee_physics_study", label: "IIT-JEE Physics – Study Material" },
+  { id: "iitjee_chemistry_practice", label: "IIT-JEE Chemistry – Practice Test" },
+  { id: "iitjee_chemistry_study", label: "IIT-JEE Chemistry – Study Material" },
+  { id: "iitjee_math_practice", label: "IIT-JEE Math – Practice Test" },
+  { id: "iitjee_math_study", label: "IIT-JEE Math – Study Material" },
+
+  // NEET
+  { id: "neet_physics_practice", label: "NEET Physics – Practice Test" },
+  { id: "neet_physics_study", label: "NEET Physics – Study Material" },
+  { id: "neet_chemistry_practice", label: "NEET Chemistry – Practice Test" },
+  { id: "neet_chemistry_study", label: "NEET Chemistry – Study Material" },
+  { id: "neet_biology_practice", label: "NEET Biology – Practice Test" },
+  { id: "neet_biology_study", label: "NEET Biology – Study Material" }
+];
+
+const container = document.getElementById("buttons");
+
+categories.forEach(c => {
+  const btn = document.createElement("button");
+  btn.innerText = c.label;
+  btn.onclick = () => getEmail(c.id);
+  container.appendChild(btn);
+});
+
 function getEmail(category) {
   fetch(`/email?category=${category}`)
     .then(res => res.json())
