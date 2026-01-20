@@ -5,12 +5,23 @@
 </head>
 <body>
 
-<button onclick="showEmail()">Show Email</button>
+<button onclick="getEmail('class9_science_practice')">
+  Class 9 Science – Practice Test
+</button>
+
+<button onclick="getEmail('class9_science_study')">
+  Class 9 Science – Study Material
+</button>
+
+<button onclick="getEmail('neet_biology_practice')">
+  NEET Biology – Practice Test
+</button>
+
 <p id="email"></p>
 
 <script>
-function showEmail() {
-  fetch("https://password-backen.onrender.com/email")
+function getEmail(category) {
+  fetch(`https://YOUR-RENDER-URL.onrender.com/email?category=${category}`)
     .then(res => res.json())
     .then(data => {
       document.getElementById("email").innerText =
@@ -18,6 +29,8 @@ function showEmail() {
     });
 }
 </script>
+
+
 
 </body>
 </html>
