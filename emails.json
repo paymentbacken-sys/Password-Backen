@@ -1,6 +1,31 @@
-[
-  { "email": "email1@gmail.com", "used": false },
-  { "email": "email2@gmail.com", "used": false },
-  { "email": "email3@gmail.com", "used": false },
-  { "email": "email4@gmail.com", "used": false }
-]
+{
+  "class9_science_practice": [
+    { "email": "c9_sci_pt1@gmail.com", "used": false },
+    { "email": "c9_sci_pt2@gmail.com", "used": false }
+  ],
+  "class9_science_study": [
+    { "email": "c9_sci_sm1@gmail.com", "used": false }
+  ],
+
+  "class10_science_practice": [
+    { "email": "c10_sci_pt1@gmail.com", "used": false }
+  ],
+  "class10_science_study": [
+    { "email": "c10_sci_sm1@gmail.com", "used": false }
+  ],
+
+  "class9_math_practice": [],
+  "class9_math_study": [],
+
+  "class11_physics_practice": [],
+  "class11_physics_study": [],
+
+  "class12_chemistry_practice": [],
+  "class12_chemistry_study": [],
+
+  "iitjee_math_practice": [],
+  "iitjee_math_study": [],
+
+  "neet_biology_practice": [],
+  "neet_biology_study": []
+}
