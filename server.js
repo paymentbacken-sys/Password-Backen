@@ -19,16 +19,26 @@ app.get("/", (req, res) => {
 
 // API route
 app.get("/email", (req, res) => {
-  let emails = JSON.parse(fs.readFileSync(EMAIL_FILE, "utf8"));
+  const { category } = req.query;
 
-  const nextEmail = emails.find(e => e.used === false);
+  if (!category) {
+    return res.json({ message: "Category missing" });
+  }
+
+  const data = JSON.parse(fs.readFileSync("emails.json", "utf8"));
+
+  if (!data[category]) {
+    return res.json({ message: "Invalid category" });
+  }
+
+  const nextEmail = data[category].find(e => !e.used);
 
   if (!nextEmail) {
-    return res.json({ message: "All emails are already used" });
+    return res.json({ message: "No emails left for this category" });
   }
 
   nextEmail.used = true;
-  fs.writeFileSync(EMAIL_FILE, JSON.stringify(emails, null, 2));
+  fs.writeFileSync("emails.json", JSON.stringify(data, null, 2));
 
   res.json({ email: nextEmail.email });
 });
