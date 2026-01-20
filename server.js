@@ -7,12 +7,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// absolute path (IMPORTANT for Render)
+// serve public folder
+app.use(express.static(path.join(__dirname, "public")));
+
 const EMAIL_FILE = path.join(__dirname, "emails.json");
 
-// root test route
+// serve index.html
 app.get("/", (req, res) => {
-  res.send("SERVER IS RUNNING");
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 // email API
@@ -30,7 +32,7 @@ app.get("/email", (req, res) => {
   let data;
   try {
     data = JSON.parse(fs.readFileSync(EMAIL_FILE, "utf8"));
-  } catch (err) {
+  } catch {
     return res.status(500).json({ message: "Invalid JSON format" });
   }
 
